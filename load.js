@@ -139,8 +139,7 @@ document.querySelector("html").innerHTML = `
   <body>
       <style>
           body {
-              display: flex;
-              width: auto;
+              width: 100%;
               margin: 15px;
               justify-content: center;
               align-items: center;
@@ -286,7 +285,6 @@ async function init() {
         }
         main.innerHTML = "";
         main.appendChild(create("pre", { innerText: JSON.stringify(client.profile, null, 2) }));
-        document.body.appendChild(create("script", { src: "https://cdnjs.cloudflare.com/ajax/libs/eruda/1.4.3/eruda.min.js" }))
     });
 }
 function load(device) {
