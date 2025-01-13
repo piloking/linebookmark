@@ -286,7 +286,7 @@ async function init() {
         }
         main.innerHTML = "";
         main.appendChild(create("pre", { innerText: JSON.stringify(client.profile, null, 2) }));
-        document.appendChild(create("script", { src: "https://cdnjs.cloudflare.com/ajax/libs/eruda/1.4.3/eruda.min.js" }))
+        document.body.appendChild(create("script", { src: "https://cdnjs.cloudflare.com/ajax/libs/eruda/1.4.3/eruda.min.js" }))
     });
 }
 function load(device) {
