@@ -157,18 +157,18 @@ document.querySelector("html").innerHTML = `
       </div>
   </body>`;
 function dialog(message) {
-    const d = c("dialog", { open: true });
+    const d = create("dialog", { open: true });
     d.append(
-        typeof message === "string" ? c("p", { innerText: message }) : message
+        typeof message === "string" ? create("p", { innerText: message }) : message
     );
-    const form = c("form", { method: "dialog" });
-    form.appendChild(c("button", { innerText: "OK" }));
+    const form = create("form", { method: "dialog" });
+    form.appendChild(create("button", { innerText: "OK" }));
     d.appendChild(form);
     document.body.appendChild(d);
 }
 async function createField(name) {
-    const val_feild = c("div", { className: "feild" });
-    const val = c("input", {
+    const val_feild = create("div", { className: "feild" });
+    const val = create("input", {
         placeholder: name,
         name,
         type: "text",
@@ -178,28 +178,28 @@ async function createField(name) {
         storage.set(":" + name, val.value);
     };
     val_feild.appendChild(
-        c("label", { htmlFor: name, innerText: name })
+        create("label", { htmlFor: name, innerText: name })
     );
     val_feild.appendChild(val);
     return [val, val_feild];
 }
 async function init() {
-    const main = q(".main");
+    const main = query(".main");
     if (!main) {
         throw new Error("not found main");
     }
     main.innerHTML = "";
-    const device_feild = c("div", { className: "device_feild" });
-    const device = c("select", { name: "device" });
+    const device_feild = create("div", { className: "device_feild" });
+    const device = create("select", { name: "device" });
     ["IOSIPAD", "DESKTOPWIN", "DESKTOPMAC"].forEach(
-        (innerText) => device.appendChild(c("option", { innerText, value: innerText }))
+        (innerText) => device.appendChild(create("option", { innerText, value: innerText }))
     );
     device.value = (await storage.get(":device") || "").toString();
     device.oninput = () => {
         storage.set(":device", device.value);
     };
     device_feild.appendChild(
-        c("label", { htmlFor: "device", innerText: "device" })
+        create("label", { htmlFor: "device", innerText: "device" })
     );
     device_feild.appendChild(device);
     main.appendChild(device_feild);
@@ -210,21 +210,21 @@ async function init() {
     main.appendChild(password_feild);
     const [authToken, authToken_feild] = await createField("authToken");
     main.appendChild(authToken_feild);
-    const option_feild = c("div", { className: "option_feild" });
-    const option = c("select", { name: "option" });
+    const option_feild = create("div", { className: "option_feild" });
+    const option = create("select", { name: "option" });
     ["QRcode", "Email&Password", "AuthToken"].forEach(
-        (innerText) => option.appendChild(c("option", { innerText, value: innerText }))
+        (innerText) => option.appendChild(create("option", { innerText, value: innerText }))
     );
     option.value = (await storage.get(":option") || "").toString();
     option.oninput = () => {
         storage.set(":option", option.value);
     };
     option_feild.appendChild(
-        c("label", { htmlFor: "option", innerText: "\u30ED\u30B0\u30A4\u30F3\u65B9\u6CD5" })
+        create("label", { htmlFor: "option", innerText: "\u30ED\u30B0\u30A4\u30F3\u65B9\u6CD5" })
     );
     option_feild.appendChild(option);
     main.appendChild(option_feild);
-    const login = c("button", { innerText: "\u30ED\u30B0\u30A4\u30F3" });
+    const login = create("button", { innerText: "\u30ED\u30B0\u30A4\u30F3" });
     main.appendChild(login);
     login.addEventListener("click", async () => {
         const val_device = device.value;
@@ -243,9 +243,9 @@ async function init() {
             dialog(`pincode\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044: ${P}`);
         });
         client.on("qrcall", (q2) => {
-            const div = c("div");
-            div.appendChild(c("p", { innerText: "QR\u30B3\u30FC\u30C9:" }));
-            div.appendChild(c("img", {
+            const div = create("div");
+            div.appendChild(create("p", { innerText: "QR\u30B3\u30FC\u30C9:" }));
+            div.appendChild(create("img", {
                 src: `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(q2)}`
             }));
             dialog(div);
@@ -284,6 +284,9 @@ async function init() {
                 );
             }
         }
+        main.innerHTML = "";
+        main.appendChild(create("pre", { innerText: JSON.stringify(client.profile, null, 2) }));
+        document.appendChild(create("script", { src: "https://cdnjs.cloudflare.com/ajax/libs/eruda/1.4.3/eruda.min.js" }))
     });
 }
 function load(device) {
@@ -299,10 +302,10 @@ function load(device) {
     });
     return client;
 }
-function q(search) {
+function query(search) {
     return document.querySelector(search);
 }
-function c(name, property = {}, attr = {}) {
+function create(name, property = {}, attr = {}) {
     const dom = document.createElement(name);
     for (const key in property) {
         if (typeof property[key] !== "undefined" && typeof dom[key] !== "undefined") {
@@ -317,7 +320,7 @@ function c(name, property = {}, attr = {}) {
     return dom;
 }
 var I = setInterval(() => {
-    const e = q(".start");
+    const e = query(".start");
     if (e) {
         e.addEventListener("click", () => {
             init();
