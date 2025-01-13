@@ -9,7 +9,7 @@ const head: Record<string, string> = {
 Deno.serve(async (req) => {
     const url = new URL(req.url);
     if (url.pathname === "/load") {
-        const res = await fetch("./load.js");
+        const res = await fetch("file:///src/load.js");
         for (const key in head) {
             if (Object.prototype.hasOwnProperty.call(head, key)) {
                 res.headers.set(key, head[key]);
